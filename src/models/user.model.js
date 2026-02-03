@@ -3,24 +3,29 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
+
     username: {
       type: DataTypes.STRING,
+      allowNull: false,
       unique: true,
-      allowNull: false
     },
+
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
-    passwordChanged: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+
     role: {
       type: DataTypes.STRING,
-      defaultValue: "EMPLOYEE"
-    }
+      allowNull: false,
+      defaultValue: "EMPLOYEE",
+    },
+
+    passwordChanged: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   });
 };

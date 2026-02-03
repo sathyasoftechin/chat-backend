@@ -6,20 +6,48 @@ const { sequelize, User } = require("./src/models");
     await sequelize.authenticate();
     console.log("✅ DB connected");
 
-    const hashedPassword = await bcrypt.hash("mads@123", 10);
+    const DEFAULT_PASSWORD = "Temp@123";
+    const hashedPassword = await bcrypt.hash(DEFAULT_PASSWORD, 10);
 
-    await User.upsert({
-      username: "maddy@ssti.com",
-      password: hashedPassword,
-      passwordChanged: false,
-      role: "EMPLOYEE"
-    });
+    const employees = [
+      {
+        username: "madan@ssti.com",
+        role: "EMPLOYEE",
+      },
+      {
+        username: "rahul@ssti.com",
+        role: "EMPLOYEE",
+      },
+      {
+        username: "mani@ssti.com",
+        role: "Manager",
+      },
+      {
+        username: "Krishna@ssti.com",
+        role: "EMPLOYEE",
+      },
+      {
+        username: "Nikhil@ssti.com",
+        role: "EMPLOYEE",
+      },
+    ];
 
-    console.log("✅ User ensured with fresh password");
+    for (const emp of employees) {
+      await User.upsert({
+        username: emp.username,
+        password: hashedPassword,
+        passwordChanged: false,
+        role: emp.role,
+      });
+
+      console.log(`✅ Ensured user: ${emp.username}`);
+    }
+
+    console.log("🎉 Employee seeding completed");
     process.exit(0);
 
   } catch (error) {
-    console.error("❌ Seeding failed:", error.message);
+    console.error("❌ Seeding failed:", error);
     process.exit(1);
   }
 })();

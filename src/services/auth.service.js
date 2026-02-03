@@ -16,12 +16,13 @@ exports.authenticate = async (user, password) => {
     return null;
   }
 
-  return jwt.sign(
-    {
-      username: user.username,
-      role: user.role
-    },
-    secret,
-    { expiresIn }
-  );
+ return jwt.sign(
+  {
+    id: user.id,           
+    username: user.username,
+    role: user.role
+  },
+  secret,
+  { expiresIn }
+);
 };

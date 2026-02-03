@@ -4,7 +4,7 @@ const { secret } = require("../config/jwt");
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  if (!authHeader?.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -12,9 +12,14 @@ module.exports = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-    req.user = decoded;
+
+    if (!decoded.id) {
+      return res.status(401).json({ message: "Invalid token payload" });
+    }
+
+    req.user = decoded; // { id, username, role }
     next();
-  } catch {
-    res.status(401).json({ message: "Invalid token" });
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
